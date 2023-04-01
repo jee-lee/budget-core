@@ -6,4 +6,7 @@ import (
 	// protobuf compiler plugins
 	_ "github.com/twitchtv/twirp/protoc-gen-twirp"
 	_ "google.golang.org/protobuf/cmd/protoc-gen-go"
+
+	// testing
+	_ "github.com/golang/mock/mockgen"
 )

@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/go-chi/chi v1.5.4
+	github.com/golang/mock v1.6.0
 	github.com/jackc/pgtype v1.14.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/joho/godotenv v1.5.1

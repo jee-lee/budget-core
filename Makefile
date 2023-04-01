@@ -1,5 +1,7 @@
 -include .env
 
+include build/makefiles/osvars.mk
+
 TEST_APP_ENV := TEST
 TEST_DB_NAME := budget_test
 export TEST_DATABASE_URL := postgres://${LOCAL_DB_USER}:${LOCAL_DB_PASSWORD}@localhost:${LOCAL_DB_PORT}/${TEST_DB_NAME}?sslmode=disable
@@ -35,7 +37,8 @@ coverage_report: coverage.out
 
 # Tools
 TOOLS := github.com/twitchtv/twirp/protoc-gen-twirp \
-		 google.golang.org/protobuf/cmd/protoc-gen-go
+		 google.golang.org/protobuf/cmd/protoc-gen-go \
+		 github.com/golang/mock/mockgen
 
 TOOLS_DIR := tools_module/tools
 TOOLS_BIN := $(TOOLS_DIR)/bin
@@ -84,3 +87,16 @@ services:
 
 clean_services:
 	rm -f $(PROTOBUF_FILES)
+
+# Mocks
+MOCK_DIR := ./internal/mocks
+
+mocks: \
+	$(MOCK_DIR)/mock_category_repository.go
+
+## Mock Sources
+$(MOCK_DIR)/mock_category_repository.go: internal/category/repository.go
+
+# mockgen commands for generation
+$(MOCK_DIR)/mock_category_repository.go :
+	$(TOOLS_BIN)/mockgen -source $< -destination $@ -package=mocks
