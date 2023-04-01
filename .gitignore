@@ -7,3 +7,7 @@
 
 # Test coverage report
 *.out
+
+# Go Tools
+/tools_module/tools/
+/tools_module/vendor/

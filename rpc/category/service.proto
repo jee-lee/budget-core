@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package budjee.budget;
+
+option go_package = "./rpc/category";
+
+service CategoryService {
+  rpc GetCategory (GetCategoryRequest) returns (Category);
+  rpc CreateCategory(CreateCategoryRequest) returns (Category);
+}
+
+message GetCategoryRequest {
+  string category_id = 1;
+}
+
+message CreateCategoryRequest {
+  // Required fields
+  string name = 1;
+
+  // Optional fields
+  string parent_category_id = 2;
+  double maximum = 3;
+  string cycle_type = 4;
+  bool rollover = 5;
+  string joint_user_id = 6;
+}
+
+message Category {
+  string id = 1;
+  string user_id = 2;
+  string name = 3;
+  string parent_category_id = 4;
+  double maximum = 5;
+  string cycle_type = 6;
+  bool rollover = 7;
+  string joint_user_id = 8;
+  string created_at = 9;
+  string updated_at = 10;
+}

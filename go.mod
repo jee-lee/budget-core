@@ -11,7 +11,9 @@ require (
 	github.com/shopspring/decimal v1.3.1
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.2
+	github.com/twitchtv/twirp v8.1.3+incompatible
 	go.uber.org/zap v1.24.0
+	google.golang.org/protobuf v1.30.0
 )
 
 require (
