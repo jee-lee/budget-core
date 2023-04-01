@@ -3,7 +3,7 @@ package repository
 import "context"
 
 type CycleType struct {
-	Id   int    `db:"id"`
+	ID   int    `db:"id"`
 	Name string `db:"name"`
 }
 
@@ -12,14 +12,17 @@ func CycleTypes() []string {
 	return []string{"weekly", "monthly", "quarterly", "semiannually", "annually"}
 }
 
-func (repo *Repository) GetCycleType(ctx context.Context, name string) (CycleType, error) {
-	result := CycleType{}
+func (repo *Repository) GetCycleType(ctx context.Context, name string) (*CycleType, error) {
+	result := &CycleType{}
 	statement := `SELECT id, name FROM cycle_types WHERE name = $1;`
-	err := repo.Pool.GetContext(ctx, &result, statement, name)
-	return result, err
+	err := repo.Pool.GetContext(ctx, result, statement, name)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
-func (repo *Repository) GetDefaultCycleType(ctx context.Context) (CycleType, error) {
+func (repo *Repository) GetDefaultCycleType(ctx context.Context) (*CycleType, error) {
 	return repo.GetCycleType(ctx, "monthly")
 }
 

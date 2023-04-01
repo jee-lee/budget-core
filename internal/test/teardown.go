@@ -12,7 +12,7 @@ func RemoveCategoriesAndCycleTypes(t testing.TB, db *repository.Repository) {
 	if err := db.Pool.Get(&struct{}{}, "DELETE from categories"); err != nil && err != sql.ErrNoRows {
 		t.Fatal("Failed to remove old categories from database: " + err.Error())
 	}
-	result := []repository.CycleType{}
+	var result []repository.CycleType
 	statement := `DELETE FROM cycle_types WHERE name in ($1, $2, $3, $4, $5)`
 	types := repository.CycleTypes()
 	err := db.Pool.SelectContext(context.Background(), &result, statement, types[0], types[1], types[2], types[3], types[4])
