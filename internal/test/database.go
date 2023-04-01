@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/BudjeeApp/budget-core/internal/repository"
+	"github.com/jee-lee/budget-core/internal/repository"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"sync"
