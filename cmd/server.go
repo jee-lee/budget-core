@@ -2,9 +2,9 @@
 package cmd
 
 import (
-	"github.com/BudjeeApp/budget-core/internal/config"
-	"github.com/BudjeeApp/budget-core/internal/repository"
-	"github.com/BudjeeApp/budget-core/internal/server"
+	"github.com/jee-lee/budget-core/internal/config"
+	"github.com/jee-lee/budget-core/internal/repository"
+	"github.com/jee-lee/budget-core/internal/server"
 	"github.com/spf13/cobra"
 )
 

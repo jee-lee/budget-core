@@ -2,7 +2,7 @@ package repository_test
 
 import (
 	"context"
-	"github.com/BudjeeApp/budget-core/internal/repository"
+	"github.com/jee-lee/budget-core/internal/repository"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

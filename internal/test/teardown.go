@@ -3,7 +3,7 @@ package test
 import (
 	"context"
 	"database/sql"
-	"github.com/BudjeeApp/budget-core/internal/repository"
+	"github.com/jee-lee/budget-core/internal/repository"
 	"testing"
 )
 
