@@ -2,7 +2,7 @@ package repository_test
 
 import (
 	"context"
-	pgxdecimal "github.com/jackc/pgtype/ext/shopspring-numeric"
+	"github.com/google/uuid"
 	"github.com/jee-lee/budget-core/internal/helpers"
 	"github.com/jee-lee/budget-core/internal/repository"
 	"github.com/stretchr/testify/assert"
@@ -16,7 +16,7 @@ func TestCreateCategory(t *testing.T) {
 		setupTest(t)
 		defer teardownTest(t)
 		req := &repository.CategoryCreateRequest{
-			UserID: helpers.StringToUUID("3fdfb7d8-2f30-48dc-812a-73335363cf9a"),
+			UserID: uuid.New(),
 			Name:   "testName",
 		}
 		category, err := testDB.CreateCategory(context.Background(), req)
@@ -29,24 +29,20 @@ func TestCreateCategory(t *testing.T) {
 		setupTest(t)
 		defer teardownTest(t)
 		parentCategoryRequest := &repository.CategoryCreateRequest{
-			UserID: helpers.StringToUUID("3fdfb7d8-2f30-48dc-812a-73335363cf9a"),
+			UserID: uuid.New(),
 			Name:   "testName",
 		}
 		parentCategory, err := testDB.CreateCategory(context.Background(), parentCategoryRequest)
 		assert.NoError(err)
 
-		amount := &pgxdecimal.Numeric{}
-		amount.Set(100.32)
-		jointUserId := helpers.StringToUUID("9dd34e9a-449c-45be-9e9e-7ea7d99da8f4")
-		cycleTypeId := 1
 		subCategoryRequest := &repository.CategoryCreateRequest{
-			UserID:           helpers.StringToUUID("3fdfb7d8-2f30-48dc-812a-73335363cf9a"),
+			UserID:           uuid.New(),
 			Name:             "Sub Category",
 			ParentCategoryID: &parentCategory.ID,
-			Maximum:          amount,
-			CycleTypeID:      &cycleTypeId,
+			Maximum:          helpers.Pointer(100.32),
+			CycleTypeID:      helpers.Pointer(1),
 			Rollover:         true,
-			JointUserID:      &jointUserId,
+			JointUserID:      helpers.Pointer(uuid.New()),
 		}
 		subCategory, err := testDB.CreateCategory(context.Background(), subCategoryRequest)
 		assert.NoError(err)
@@ -62,9 +58,9 @@ func TestCreateCategory(t *testing.T) {
 	t.Run("should require an existing CategoryID for the ParentCategoryID", func(t *testing.T) {
 		setupTest(t)
 		defer teardownTest(t)
-		nonexistentCategoryId := helpers.StringToUUID("fccc016e-4ded-4d23-b604-ac604a5d7d48")
+		nonexistentCategoryId := uuid.New()
 		req := &repository.CategoryCreateRequest{
-			UserID:           helpers.StringToUUID("503f2c89-1c40-4388-8852-9f712aa83066"),
+			UserID:           uuid.New(),
 			Name:             "Nonexistent Parent Category",
 			ParentCategoryID: &nonexistentCategoryId,
 		}
@@ -81,7 +77,7 @@ func TestCreateCategory(t *testing.T) {
 			t.Fatalf("test setup failure. error occurred when trying to get default cycle type: %s", err.Error())
 		}
 		req := &repository.CategoryCreateRequest{
-			UserID: helpers.StringToUUID("3fdfb7d8-2f30-48dc-812a-73335363cf9a"),
+			UserID: uuid.New(),
 			Name:   "testName",
 		}
 		category, err := testDB.CreateCategory(context.Background(), req)
@@ -97,7 +93,7 @@ func TestGetCategory(t *testing.T) {
 
 	t.Run("should retrieve the correct category", func(t *testing.T) {
 		req := &repository.CategoryCreateRequest{
-			UserID: helpers.StringToUUID("3fdfb7d8-2f30-48dc-812a-733353123f9a"),
+			UserID: uuid.New(),
 			Name:   "testName",
 		}
 		createdCategory, err := testDB.CreateCategory(context.Background(), req)
@@ -109,7 +105,7 @@ func TestGetCategory(t *testing.T) {
 	})
 
 	t.Run("should return an error if category is not found", func(t *testing.T) {
-		retrievedCategory, err := testDB.GetCategory(context.Background(), helpers.StringToUUID("3fdfb7d8-2f30-48dc-812a-733353123f9a"))
+		retrievedCategory, err := testDB.GetCategory(context.Background(), uuid.New())
 		assert.Nil(t, retrievedCategory)
 		assert.Error(t, err)
 	})

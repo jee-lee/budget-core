@@ -9,7 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	pgtype "github.com/jackc/pgtype"
+	uuid "github.com/google/uuid"
 	repository "github.com/jee-lee/budget-core/internal/repository"
 )
 
@@ -52,7 +52,7 @@ func (mr *MockRepositoryMockRecorder) CreateCategory(ctx, request interface{}) *
 }
 
 // GetCategory mocks base method.
-func (m *MockRepository) GetCategory(ctx context.Context, id pgtype.UUID) (*repository.Category, error) {
+func (m *MockRepository) GetCategory(ctx context.Context, id uuid.UUID) (*repository.Category, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategory", ctx, id)
 	ret0, _ := ret[0].(*repository.Category)

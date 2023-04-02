@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"github.com/golang/mock/gomock"
+	"github.com/google/uuid"
 	"github.com/jee-lee/budget-core/internal/category"
-	"github.com/jee-lee/budget-core/internal/helpers"
 	"github.com/jee-lee/budget-core/internal/mocks"
 	"github.com/jee-lee/budget-core/internal/repository"
 	pb "github.com/jee-lee/budget-core/rpc/category"
@@ -16,8 +16,8 @@ import (
 )
 
 var successfulCategory = &repository.Category{
-	ID:     helpers.StringToUUID("13a6682f-795c-49c1-bfbb-f94f4b770eef"),
-	UserID: helpers.StringToUUID("2b807819-078c-4d0d-b2b3-6204ff95f967"),
+	ID:     uuid.MustParse("13a6682f-795c-49c1-bfbb-f94f4b770eef"),
+	UserID: uuid.MustParse("2b807819-078c-4d0d-b2b3-6204ff95f967"),
 	Name:   "Successful Category",
 }
 

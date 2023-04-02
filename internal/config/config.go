@@ -9,10 +9,8 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/joho/godotenv"
-	"github.com/shopspring/decimal"
-
 	"github.com/jmoiron/sqlx"
+	"github.com/joho/godotenv"
 
 	_ "github.com/lib/pq"
 )
@@ -35,7 +33,6 @@ func init() {
 			log.Fatal("Error loading .env file")
 		}
 	}
-	decimal.MarshalJSONWithoutQuotes = true
 	configureLogger(appEnv)
 	Logger.Info("logger construction succeeded")
 }
