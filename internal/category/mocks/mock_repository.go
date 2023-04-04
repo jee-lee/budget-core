@@ -66,7 +66,7 @@ func (mr *MockRepositoryMockRecorder) CreateCycleTypes(ctx interface{}) *gomock.
 }
 
 // GetCategory mocks base method.
-func (m *MockRepository) GetCategory(ctx context.Context, id uuid.UUID) (*repository.Category, error) {
+func (m *MockRepository) GetCategory(ctx context.Context, id *uuid.UUID) (*repository.Category, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCategory", ctx, id)
 	ret0, _ := ret[0].(*repository.Category)

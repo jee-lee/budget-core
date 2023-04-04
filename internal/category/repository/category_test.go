@@ -84,13 +84,13 @@ func TestRepository_GetCategory(t *testing.T) {
 		createdCategory, err := testDB.CreateCategory(context.Background(), req)
 		assert.NoError(t, err)
 
-		retrievedCategory, err := testDB.GetCategory(context.Background(), createdCategory.ID)
+		retrievedCategory, err := testDB.GetCategory(context.Background(), &createdCategory.ID)
 		assert.NoError(t, err)
 		assert.Equal(t, createdCategory.ID, retrievedCategory.ID)
 	})
 
 	t.Run("should return an error if category is not found", func(t *testing.T) {
-		retrievedCategory, err := testDB.GetCategory(context.Background(), uuid.New())
+		retrievedCategory, err := testDB.GetCategory(context.Background(), helpers.Pointer(uuid.New()))
 		assert.Nil(t, retrievedCategory)
 		assert.Error(t, err)
 	})

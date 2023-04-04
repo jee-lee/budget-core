@@ -30,7 +30,7 @@ type CategoryCreateRequest struct {
 	JointUserID      *uuid.UUID `db:"joint_user_id"`
 }
 
-func (repo *repository) GetCategory(ctx context.Context, id uuid.UUID) (*Category, error) {
+func (repo *repository) GetCategory(ctx context.Context, id *uuid.UUID) (*Category, error) {
 	result := &Category{}
 	statement := `
 		SELECT id, user_id, name, parent_category_id, maximum, cycle_type_id, rollover, joint_user_id, created_at, updated_at

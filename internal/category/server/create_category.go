@@ -16,12 +16,12 @@ func (s *Server) CreateCategory(ctx context.Context, req *pb.CreateCategoryReque
 	}
 	parentCategoryId, err := helpers.GetUUID(req.GetParentCategoryId())
 	if err != nil {
-		return nil, twirp.InvalidArgumentError("parent_category_id", "invalid uuid")
+		return nil, twirp.InvalidArgumentError("parent_category_id", "is an invalid uuid")
 	}
 	maximum := req.GetMaximum()
 	jointUserId, err := helpers.GetUUID(req.GetJointUserId())
 	if err != nil {
-		return nil, twirp.InvalidArgumentError("joint_user_id", "invalid uuid")
+		return nil, twirp.InvalidArgumentError("joint_user_id", "is an invalid uuid")
 	}
 
 	var cycleType *repository.CycleType
@@ -33,7 +33,7 @@ func (s *Server) CreateCategory(ctx context.Context, req *pb.CreateCategoryReque
 	} else {
 		cycleType, err = s.Repo.GetCycleTypeByName(ctx, req.CycleType)
 		if err == sql.ErrNoRows {
-			return nil, twirp.InvalidArgumentError("cycle_type", "invalid cycle_type")
+			return nil, twirp.InvalidArgumentError("cycle_type", "is an invalid cycle_type")
 		} else if err != nil {
 			return nil, twirp.InternalError(InternalError)
 		}
