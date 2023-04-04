@@ -15,18 +15,6 @@ import (
 	"time"
 )
 
-var (
-	successfulCategory = &repository.Category{
-		ID:     uuid.MustParse("13a6682f-795c-49c1-bfbb-f94f4b770eef"),
-		UserID: uuid.MustParse("2b807819-078c-4d0d-b2b3-6204ff95f967"),
-		Name:   "Successful Category",
-	}
-	defaultCycleType = &repository.CycleType{
-		ID:   2,
-		Name: "monthly",
-	}
-)
-
 func TestServer_CreateCategory(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mockRepo := mocks.NewMockRepository(ctrl)
@@ -67,7 +55,6 @@ func TestServer_CreateCategory(t *testing.T) {
 		resp, err := client.CreateCategory(context.Background(), req)
 		assert.NoError(t, err)
 		assert.Equal(t, successfulCategory.ID.String(), resp.Id)
-
 	})
 
 	t.Run("should respond with the correct cycle type if cycle type is given", func(t *testing.T) {
@@ -178,14 +165,14 @@ func TestServer_CreateCategory(t *testing.T) {
 			Expected: "invalid_argument",
 		},
 		{
-			TestName: "should return an internal error when there is an invalid cycle_type in the request",
+			TestName: "should return an internal error when the repository fails while getting the cycle type",
 			RepoFunc: func(repo *mocks.MockRepository) {
 				repo.EXPECT().GetCycleTypeByName(gomock.Any(), gomock.Any()).Return(nil, sql.ErrConnDone).Times(1)
 			},
 			Expected: "internal",
 		},
 		{
-			TestName: "should return an internal error when there is an invalid cycle_type in the request",
+			TestName: "should return an internal error when the repository fails while creating the category",
 			RepoFunc: func(repo *mocks.MockRepository) {
 				repo.EXPECT().GetCycleTypeByName(gomock.Any(), gomock.Any()).Return(&repository.CycleType{
 					ID:   1,
@@ -238,7 +225,7 @@ func TestServer_CreateCategory(t *testing.T) {
 	}
 
 	for _, tc := range invalidArgumentTestCases {
-		t.Run("should return an invalid argument error for"+tc.TestName, func(t *testing.T) {
+		t.Run("should return an invalid argument error for "+tc.TestName, func(t *testing.T) {
 			mockRepo.
 				EXPECT().
 				CreateCategory(gomock.Any(), gomock.Any()).

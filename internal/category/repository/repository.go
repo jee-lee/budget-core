@@ -8,7 +8,7 @@ import (
 
 type Repository interface {
 	CreateCategory(ctx context.Context, request *CategoryCreateRequest) (*Category, error)
-	GetCategory(ctx context.Context, id uuid.UUID) (*Category, error)
+	GetCategory(ctx context.Context, id *uuid.UUID) (*Category, error)
 	GetCycleTypeByName(ctx context.Context, name string) (*CycleType, error)
 	GetCycleTypeByID(ctx context.Context, id int) (*CycleType, error)
 	GetDefaultCycleType(ctx context.Context) (*CycleType, error)
