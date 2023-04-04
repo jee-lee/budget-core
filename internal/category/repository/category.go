@@ -13,7 +13,7 @@ type Category struct {
 	Name             string     `db:"name"`
 	ParentCategoryID *uuid.UUID `db:"parent_category_id"`
 	Maximum          *float64   `db:"maximum"`
-	CycleTypeID      *int       `db:"cycle_type_id"`
+	CycleTypeID      int        `db:"cycle_type_id"`
 	Rollover         bool       `db:"rollover"`
 	JointUserID      *uuid.UUID `db:"joint_user_id"`
 	CreatedAt        time.Time  `db:"created_at"`
@@ -25,21 +25,12 @@ type CategoryCreateRequest struct {
 	Name             string     `db:"name"`
 	ParentCategoryID *uuid.UUID `db:"parent_category_id"`
 	Maximum          *float64   `db:"maximum"`
-	CycleTypeID      *int       `db:"cycle_type_id"`
+	CycleTypeID      int        `db:"cycle_type_id"`
 	Rollover         bool       `db:"rollover"`
 	JointUserID      *uuid.UUID `db:"joint_user_id"`
 }
 
-type CategoryUpdateRequest struct {
-	ID               uuid.UUID  `db:"id"`
-	Name             string     `db:"name"`
-	ParentCategoryId *uuid.UUID `db:"parent_category_id"`
-	Maximum          float64    `db:"maximum"`
-	Rollover         bool       `db:"rollover"`
-	JointUserId      *uuid.UUID `db:"joint_user_id"`
-}
-
-func (repo *Repository) GetCategory(ctx context.Context, id uuid.UUID) (*Category, error) {
+func (repo *repository) GetCategory(ctx context.Context, id uuid.UUID) (*Category, error) {
 	result := &Category{}
 	statement := `
 		SELECT id, user_id, name, parent_category_id, maximum, cycle_type_id, rollover, joint_user_id, created_at, updated_at
@@ -53,17 +44,7 @@ func (repo *Repository) GetCategory(ctx context.Context, id uuid.UUID) (*Categor
 	return result, nil
 }
 
-// TODO: Finish this
-// func (repo *Repository) GetCategories() {}
-
-func (repo *Repository) CreateCategory(ctx context.Context, category *CategoryCreateRequest) (*Category, error) {
-	if category.CycleTypeID == nil {
-		defaultCycleType, err := repo.GetDefaultCycleType(ctx)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get default cycle_type: %w", err)
-		}
-		category.CycleTypeID = &defaultCycleType.ID
-	}
+func (repo *repository) CreateCategory(ctx context.Context, category *CategoryCreateRequest) (*Category, error) {
 	result := &Category{}
 	query := `
 		INSERT INTO categories
@@ -83,6 +64,3 @@ func (repo *Repository) CreateCategory(ctx context.Context, category *CategoryCr
 	}
 	return result, nil
 }
-
-// TODO: Implement Update Category
-// func (repo *Repository) UpdateCategory(ctx context.Context, category Category) (Category, error) {}

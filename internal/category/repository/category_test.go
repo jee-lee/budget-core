@@ -1,23 +1,23 @@
-package repository_test
+package repository
 
 import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/jee-lee/budget-core/internal/helpers"
-	"github.com/jee-lee/budget-core/internal/repository"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestCreateCategory(t *testing.T) {
+func TestRepository_CreateCategory(t *testing.T) {
 	assert := assert.New(t)
 
 	t.Run("should create a category with minimum fields", func(t *testing.T) {
 		setupTest(t)
 		defer teardownTest(t)
-		req := &repository.CategoryCreateRequest{
-			UserID: uuid.New(),
-			Name:   "testName",
+		req := &CategoryCreateRequest{
+			UserID:      uuid.New(),
+			Name:        "testName",
+			CycleTypeID: 1,
 		}
 		category, err := testDB.CreateCategory(context.Background(), req)
 		assert.NoError(err)
@@ -28,19 +28,20 @@ func TestCreateCategory(t *testing.T) {
 	t.Run("should create a category with all fields", func(t *testing.T) {
 		setupTest(t)
 		defer teardownTest(t)
-		parentCategoryRequest := &repository.CategoryCreateRequest{
-			UserID: uuid.New(),
-			Name:   "testName",
+		parentCategoryRequest := &CategoryCreateRequest{
+			UserID:      uuid.New(),
+			Name:        "testName",
+			CycleTypeID: 1,
 		}
 		parentCategory, err := testDB.CreateCategory(context.Background(), parentCategoryRequest)
 		assert.NoError(err)
 
-		subCategoryRequest := &repository.CategoryCreateRequest{
+		subCategoryRequest := &CategoryCreateRequest{
 			UserID:           uuid.New(),
 			Name:             "Sub Category",
 			ParentCategoryID: &parentCategory.ID,
 			Maximum:          helpers.Pointer(100.32),
-			CycleTypeID:      helpers.Pointer(1),
+			CycleTypeID:      1,
 			Rollover:         true,
 			JointUserID:      helpers.Pointer(uuid.New()),
 		}
@@ -59,7 +60,7 @@ func TestCreateCategory(t *testing.T) {
 		setupTest(t)
 		defer teardownTest(t)
 		nonexistentCategoryId := uuid.New()
-		req := &repository.CategoryCreateRequest{
+		req := &CategoryCreateRequest{
 			UserID:           uuid.New(),
 			Name:             "Nonexistent Parent Category",
 			ParentCategoryID: &nonexistentCategoryId,
@@ -68,33 +69,17 @@ func TestCreateCategory(t *testing.T) {
 		assert.Error(err)
 		assert.Nil(category)
 	})
-
-	t.Run("should default to the default cycle_type if CycleTypeID is not populated", func(t *testing.T) {
-		setupTest(t)
-		defer teardownTest(t)
-		defaultCycleType, err := testDB.GetDefaultCycleType(context.Background())
-		if err != nil {
-			t.Fatalf("test setup failure. error occurred when trying to get default cycle type: %s", err.Error())
-		}
-		req := &repository.CategoryCreateRequest{
-			UserID: uuid.New(),
-			Name:   "testName",
-		}
-		category, err := testDB.CreateCategory(context.Background(), req)
-		assert.NoError(err)
-		assert.Equal(&defaultCycleType.ID, category.CycleTypeID)
-	})
-
 }
 
-func TestGetCategory(t *testing.T) {
+func TestRepository_GetCategory(t *testing.T) {
 	setupTest(t)
 	defer teardownTest(t)
 
 	t.Run("should retrieve the correct category", func(t *testing.T) {
-		req := &repository.CategoryCreateRequest{
-			UserID: uuid.New(),
-			Name:   "testName",
+		req := &CategoryCreateRequest{
+			UserID:      uuid.New(),
+			Name:        "testName",
+			CycleTypeID: 1,
 		}
 		createdCategory, err := testDB.CreateCategory(context.Background(), req)
 		assert.NoError(t, err)

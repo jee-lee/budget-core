@@ -30,7 +30,7 @@ drop_dev_db:
 # Test commands
 .PHONY: test coverage_report
 test coverage.out:
-	APP_ENV=$(TEST_APP_ENV) go test -v -p 1 ./... -coverpkg=./... -coverprofile ./coverage.out
+	APP_ENV=$(TEST_APP_ENV) go test -v -p 1 ./... -coverpkg=./internal/... -coverprofile ./coverage.out
 
 coverage_report: coverage.out
 	APP_ENV=$(TEST_APP_ENV) go tool cover -html=coverage.out
@@ -89,14 +89,14 @@ clean_services:
 	rm -f $(PROTOBUF_FILES)
 
 # Mocks
-MOCK_DIR := ./internal/mocks
+MOCK_DIR := ./internal/category/mocks
 
 mocks: \
-	$(MOCK_DIR)/mock_category_repository.go
+	$(MOCK_DIR)/mock_repository.go
 
 ## Mock Sources
-$(MOCK_DIR)/mock_category_repository.go: internal/category/repository.go
+$(MOCK_DIR)/mock_repository.go: internal/category/repository/repository.go
 
 # mockgen commands for generation
-$(MOCK_DIR)/mock_category_repository.go :
+$(MOCK_DIR)/mock_repository.go :
 	$(TOOLS_BIN)/mockgen -source $< -destination $@ -package=mocks

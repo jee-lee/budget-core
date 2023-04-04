@@ -1,15 +1,18 @@
-package category
+package server
 
 import (
-	"context"
+	"github.com/jee-lee/budget-core/internal/category/repository"
 	"github.com/jee-lee/budget-core/internal/config"
-	pb "github.com/jee-lee/budget-core/rpc/category"
 	"go.uber.org/zap"
 )
 
+var (
+	InternalError = "internal server error"
+)
+
 type Server struct {
-	Repository Repository
-	Logger     Logger
+	Repo   repository.Repository
+	Logger Logger
 }
 
 // TODO: Move this outside of category server
@@ -21,17 +24,9 @@ type Logger interface {
 	Fatal(msg string, fields ...zap.Field)
 }
 
-func NewServer(r Repository) *Server {
+func NewServer(r repository.Repository) *Server {
 	return &Server{
 		r,
 		config.Logger,
 	}
-}
-
-func (s *Server) GetCategory(ctx context.Context, req *pb.GetCategoryRequest) (*pb.Category, error) {
-	return nil, nil
-}
-
-func (s *Server) CreateCategory(ctx context.Context, req *pb.CreateCategoryRequest) (*pb.Category, error) {
-	return nil, nil
 }
