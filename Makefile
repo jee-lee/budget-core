@@ -6,6 +6,12 @@ TEST_APP_ENV := TEST
 TEST_DB_NAME := budget_test
 export TEST_DATABASE_URL := postgres://${LOCAL_DB_USER}:${LOCAL_DB_PASSWORD}@localhost:${LOCAL_DB_PORT}/${TEST_DB_NAME}?sslmode=disable
 
+run_server:
+	go run main.go server
+
+seed_database:
+	go run main.go seedDatabase
+
 # Database commands
 .PHONY: test_db rollback_test_db drop_test_db
 test_db:
