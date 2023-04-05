@@ -9,22 +9,18 @@ import (
 )
 
 func (s *Server) GetCategory(ctx context.Context, req *pb.GetCategoryRequest) (*pb.Category, error) {
-	categoryId, err := helpers.GetUUID(req.GetCategoryId())
-	if categoryId == nil {
+	if req.CategoryId == "" {
 		return nil, twirp.RequiredArgumentError("category_id")
 	}
-	if err != nil {
+	if !helpers.IsValidUUID(req.CategoryId) {
 		return nil, twirp.InvalidArgumentError("category_id", "is an invalid uuid")
 	}
-	category, err := s.Repo.GetCategory(ctx, categoryId)
+	category, err := s.Repo.GetCategory(ctx, req.CategoryId)
 	if err == sql.ErrNoRows {
 		return nil, twirp.NotFoundError("category not found")
 	} else if err != nil {
 		return nil, twirp.InternalError(InternalError)
 	}
-	categoryResponse, err := s.makeCategoryResponse(ctx, category)
-	if err != nil {
-		return nil, twirp.InternalError(InternalError)
-	}
-	return categoryResponse, nil
+	categoryResponse := category.ToProto()
+	return &categoryResponse, nil
 }

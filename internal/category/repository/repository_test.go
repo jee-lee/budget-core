@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
 	"github.com/jmoiron/sqlx"
@@ -25,14 +24,11 @@ func setupTest(t *testing.T) {
 	if err != nil {
 		t.Fatal(err.Error())
 	}
-	removeCategoriesAndCycleTypes(t)
-	if err = testDB.CreateCycleTypes(context.TODO()); err != nil {
-		t.Fatal("could not seed cycle types in database " + err.Error())
-	}
+	removeCategories(t)
 }
 
 func teardownTest(t *testing.T) {
-	removeCategoriesAndCycleTypes(t)
+	removeCategories(t)
 }
 
 func getDBInstance() (Repository, error) {
@@ -50,7 +46,7 @@ func getDBInstance() (Repository, error) {
 					err = fmt.Errorf("could not connect to database: %s", pingErr.Error())
 					return
 				}
-				testDB = NewRepository(pgdb)
+				testDB = NewRepository(*pgdb)
 			},
 		)
 		if err != nil {
@@ -60,21 +56,9 @@ func getDBInstance() (Repository, error) {
 	return testDB, nil
 }
 
-func removeCategoriesAndCycleTypes(t testing.TB) {
+func removeCategories(t testing.TB) {
 	t.Helper()
-	if err := pgdb.Get(&struct{}{}, "DELETE from categories"); err != nil && err != sql.ErrNoRows {
+	if err := pgdb.Get(&struct{}{}, "DELETE FROM categories"); err != nil && err != sql.ErrNoRows {
 		t.Fatal("Failed to remove old categories from database: " + err.Error())
-	}
-	var result []CycleType
-	statement := `DELETE FROM cycle_types WHERE name in ($1, $2, $3, $4, $5)`
-	types := CycleTypes()
-	err := pgdb.SelectContext(context.Background(), &result, statement, types[0], types[1], types[2], types[3], types[4])
-	if err != nil {
-		t.Fatal("failed to remove cycle types from database: " + err.Error())
-	}
-	// Reset the sequence
-	_, err = pgdb.ExecContext(context.Background(), "ALTER SEQUENCE public.cycle_types_id_seq RESTART WITH 1")
-	if err != nil {
-		t.Fatal("failed to reset cycle_types_id_seq: " + err.Error())
 	}
 }

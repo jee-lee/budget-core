@@ -9,6 +9,14 @@ service CategoryService {
   rpc CreateCategory(CreateCategoryRequest) returns (Category);
 }
 
+enum CycleType {
+  monthly = 0;
+  weekly = 1;
+  quarterly = 2;
+  semiannually = 3;
+  annually = 4;
+}
+
 message GetCategoryRequest {
   string category_id = 1;
 }
@@ -19,8 +27,8 @@ message CreateCategoryRequest {
 
   // Optional fields
   string parent_category_id = 2;
-  double maximum = 3;
-  string cycle_type = 4;
+  int64 allowance = 3;
+  CycleType cycle_type = 4;
   bool rollover = 5;
   string joint_user_id = 6;
 }
@@ -30,8 +38,8 @@ message Category {
   string user_id = 2;
   string name = 3;
   string parent_category_id = 4;
-  double maximum = 5;
-  string cycle_type = 6;
+  int64 allowance = 5;
+  CycleType cycle_type = 6;
   bool rollover = 7;
   string joint_user_id = 8;
   string created_at = 9;
