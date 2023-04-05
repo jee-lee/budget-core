@@ -8,30 +8,31 @@ END;
 $update_updated_at$ LANGUAGE plpgsql;
 
 CREATE TYPE cycle_type AS ENUM (
-    'weekly',
-    'monthly',
-    'quarterly',
-    'semiannually',
-    'annually'
-);
+	'weekly',
+	'monthly',
+	'quarterly',
+	'semiannually',
+	'annually'
+	);
 
 CREATE TYPE transaction_type AS ENUM (
-    'charge',
-    'refund',
-    'deposit',
-    'withdrawal',
-    'interest',
-    'adjustment'
-);
+	'charge',
+	'refund',
+	'deposit',
+	'withdrawal',
+	'interest',
+	'adjustment'
+	);
+
 CREATE TYPE account_type AS ENUM (
-    'checking',
-    'savings',
-    'credit'
-);
+	'checking',
+	'savings',
+	'credit'
+	);
 
 CREATE TYPE currency AS ENUM (
-    'USD'
-);
+	'USD'
+	);
 
 CREATE TABLE accounts (
 	PRIMARY KEY (id),
@@ -74,7 +75,7 @@ CREATE TABLE categories (
 	name               TEXT        NOT NULL,
 	parent_category_id uuid REFERENCES categories (id),
 	allowance          BIGINT,
-	cycle_type      cycle_type,
+	cycle_type         cycle_type,
 	rollover           BOOLEAN              DEFAULT FALSE,
 	joint_user_id      uuid,
 	created_at         timestamptz NOT NULL DEFAULT NOW(),
@@ -101,7 +102,7 @@ CREATE TABLE transactions (
 	account_id       uuid REFERENCES accounts (id),
 	amount           BIGINT,
 	currency         currency         NOT NULL DEFAULT 'USD',
-	comments         TEXT,
+	comment          TEXT,
 	created_at       timestamptz      NOT NULL DEFAULT NOW(),
 	updated_at       timestamptz      NOT NULL DEFAULT NOW()
 );

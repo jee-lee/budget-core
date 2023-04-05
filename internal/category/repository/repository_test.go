@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"os"
 	"sync"
 	"testing"
 )
@@ -14,8 +15,6 @@ var (
 	pgdb          *sqlx.DB
 	testDB        Repository
 )
-
-const testDatabaseUrl = "postgres://postgres:postgres@127.0.0.1:9995/budget_test?sslmode=disable"
 
 func setupTest(t *testing.T) {
 	t.Helper()
@@ -37,7 +36,7 @@ func getDBInstance() (Repository, error) {
 		oneTestDbPool.Do(
 			func() {
 				var openErr error
-				pgdb, openErr = sqlx.Open("postgres", testDatabaseUrl)
+				pgdb, openErr = sqlx.Open("postgres", os.Getenv("TEST_DATABASE_URL"))
 				if openErr != nil {
 					err = fmt.Errorf("could not create database handle: %s", openErr.Error())
 					return

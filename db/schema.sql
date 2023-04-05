@@ -155,7 +155,7 @@ CREATE TABLE public.transactions (
     account_id uuid,
     amount bigint,
     currency public.currency DEFAULT 'USD'::public.currency NOT NULL,
-    comments text,
+    comment text,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL
 );

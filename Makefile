@@ -3,8 +3,7 @@
 include build/makefiles/osvars.mk
 
 TEST_APP_ENV := TEST
-TEST_DB_NAME := budget_test
-export TEST_DATABASE_URL := postgres://${LOCAL_DB_USER}:${LOCAL_DB_PASSWORD}@localhost:${LOCAL_DB_PORT}/${TEST_DB_NAME}?sslmode=disable
+export TEST_DATABASE_URL := postgres://${LOCAL_DB_USER}:${LOCAL_DB_PASSWORD}@${LOCAL_DB_HOST}:${LOCAL_DB_PORT}/${LOCAL_DB_TEST_DATABASE}?sslmode=disable
 
 run_server:
 	go run main.go server
@@ -36,10 +35,10 @@ drop_dev_db:
 # Test commands
 .PHONY: test coverage_report
 test coverage.out:
-	APP_ENV=$(TEST_APP_ENV) go test -v -p 1 ./... -coverpkg=./internal/... -coverprofile ./coverage.out
+	APP_ENV=$(TEST_APP_ENV) TEST_DATABASE_URL=$(TEST_DATABASE_URL) go test -v -p 1 ./... -coverpkg=./internal/... -coverprofile ./coverage.out
 
 coverage_report: coverage.out
-	APP_ENV=$(TEST_APP_ENV) go tool cover -html=coverage.out
+	go tool cover -html=coverage.out
 
 # Tools
 TOOLS := github.com/twitchtv/twirp/protoc-gen-twirp \
