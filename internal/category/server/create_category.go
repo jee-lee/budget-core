@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"database/sql"
 	"github.com/google/uuid"
 	"github.com/jee-lee/budget-core/internal/category/repository"
 	"github.com/jee-lee/budget-core/internal/helpers"
@@ -14,46 +13,27 @@ func (s *Server) CreateCategory(ctx context.Context, req *pb.CreateCategoryReque
 	if req.Name == "" {
 		return nil, twirp.RequiredArgumentError("name")
 	}
-	parentCategoryId, err := helpers.GetUUID(req.GetParentCategoryId())
+	parentCategoryId, err := helpers.NullStringFromUUID("parent_category_id", req.GetParentCategoryId())
 	if err != nil {
-		return nil, twirp.InvalidArgumentError("parent_category_id", "is an invalid uuid")
+		return nil, err
 	}
-	maximum := req.GetMaximum()
-	jointUserId, err := helpers.GetUUID(req.GetJointUserId())
+	jointUserId, err := helpers.NullStringFromUUID("joint_user_id", req.GetJointUserId())
 	if err != nil {
-		return nil, twirp.InvalidArgumentError("joint_user_id", "is an invalid uuid")
+		return nil, err
 	}
-
-	var cycleType *repository.CycleType
-	if req.CycleType == "" {
-		cycleType, err = s.Repo.GetDefaultCycleType(ctx)
-		if err != nil {
-			return nil, twirp.InternalError(InternalError)
-		}
-	} else {
-		cycleType, err = s.Repo.GetCycleTypeByName(ctx, req.CycleType)
-		if err == sql.ErrNoRows {
-			return nil, twirp.InvalidArgumentError("cycle_type", "is an invalid cycle_type")
-		} else if err != nil {
-			return nil, twirp.InternalError(InternalError)
-		}
-	}
-	repoCategoryCreateRequest := &repository.CategoryCreateRequest{
-		UserID:           uuid.New(),
-		Name:             req.Name,
+	repoCategoryCreateRequest := repository.CategoryCreateRequest{
+		UserID:           uuid.NewString(),
+		Name:             req.GetName(),
 		ParentCategoryID: parentCategoryId,
-		Maximum:          &maximum,
-		CycleTypeID:      cycleType.ID,
-		Rollover:         req.Rollover,
+		Allowance:        req.GetAllowance(),
+		CycleType:        req.GetCycleType().String(),
+		Rollover:         req.GetRollover(),
 		JointUserID:      jointUserId,
 	}
 	createdCategory, err := s.Repo.CreateCategory(ctx, repoCategoryCreateRequest)
 	if err != nil {
 		return nil, twirp.InternalError(InternalError)
 	}
-	categoryResponse, err := s.makeCategoryResponse(ctx, createdCategory)
-	if err != nil {
-		return nil, twirp.InternalError(InternalError)
-	}
-	return categoryResponse, nil
+	categoryResponse := createdCategory.ToProto()
+	return &categoryResponse, nil
 }

@@ -21,7 +21,7 @@ var serverCmd = &cobra.Command{
 }
 
 func RunServer() {
-	r := repository.NewRepository(config.GetDB())
+	r := repository.NewRepository(*config.GetDB())
 	server := server.NewServer(r)
 	twirpHandler := category.NewCategoryServiceServer(server)
 	err := http.ListenAndServe(":8080", twirpHandler)

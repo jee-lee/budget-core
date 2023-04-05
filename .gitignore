@@ -3,7 +3,8 @@
 
 .DS_Store
 .idea
-
+.project
+.dbeaver
 
 # Test coverage report
 *.out
