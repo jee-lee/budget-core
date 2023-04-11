@@ -1,8 +1,8 @@
 package repository_test
 
 import (
-	. "github.com/jee-lee/budget-core/internal/category/repository"
 	"github.com/jee-lee/budget-core/internal/test"
+	. "github.com/jee-lee/budget-core/internal/user/repository"
 	_ "github.com/lib/pq"
 	"testing"
 )
@@ -17,12 +17,10 @@ func setupTest(t *testing.T) {
 	if err != nil {
 		t.Fatal(err.Error())
 	}
-	repo = testRepo.Category
-	test.RemoveCategories(t)
+	repo = testRepo.User
 	test.RemoveUsers(t)
 }
 
 func teardownTest(t *testing.T) {
-	test.RemoveCategories(t)
 	test.RemoveUsers(t)
 }
