@@ -1,5 +1,7 @@
 # budget-core
 
+## This has been moved to https://github.com/BudjeeApp/budget-core
+
 ## Introduction
 Hello and welcome to my personal budgeting project! The budget-core application provides a set of APIs for creating and managing
 categories, transactions, and payment accounts. These APIs are built using Twirp and RPC. 
