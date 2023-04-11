@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	pb "github.com/jee-lee/budget-core/rpc/category"
+	pb "github.com/BudjeeApp/budget-core/rpc/category"
 	"time"
 )
 

@@ -3,10 +3,10 @@ package repository_test
 import (
 	"context"
 	"database/sql"
+	"github.com/BudjeeApp/budget-core/internal/test"
+	. "github.com/BudjeeApp/budget-core/internal/user/repository"
 	"github.com/go-faker/faker/v4"
 	"github.com/google/uuid"
-	"github.com/jee-lee/budget-core/internal/test"
-	. "github.com/jee-lee/budget-core/internal/user/repository"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

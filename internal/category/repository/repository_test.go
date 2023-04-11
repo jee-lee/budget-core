@@ -1,8 +1,8 @@
 package repository_test
 
 import (
-	. "github.com/jee-lee/budget-core/internal/category/repository"
-	"github.com/jee-lee/budget-core/internal/test"
+	. "github.com/BudjeeApp/budget-core/internal/category/repository"
+	"github.com/BudjeeApp/budget-core/internal/test"
 	_ "github.com/lib/pq"
 	"testing"
 )

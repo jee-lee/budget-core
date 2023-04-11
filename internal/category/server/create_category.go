@@ -2,10 +2,10 @@ package server
 
 import (
 	"context"
+	"github.com/BudjeeApp/budget-core/internal/category/repository"
+	"github.com/BudjeeApp/budget-core/internal/helpers"
+	pb "github.com/BudjeeApp/budget-core/rpc/category"
 	"github.com/google/uuid"
-	"github.com/jee-lee/budget-core/internal/category/repository"
-	"github.com/jee-lee/budget-core/internal/helpers"
-	pb "github.com/jee-lee/budget-core/rpc/category"
 	"github.com/twitchtv/twirp"
 )
 

@@ -3,9 +3,9 @@ package repository_test
 import (
 	"context"
 	"database/sql"
+	. "github.com/BudjeeApp/budget-core/internal/category/repository"
+	"github.com/BudjeeApp/budget-core/internal/test"
 	"github.com/google/uuid"
-	. "github.com/jee-lee/budget-core/internal/category/repository"
-	"github.com/jee-lee/budget-core/internal/test"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

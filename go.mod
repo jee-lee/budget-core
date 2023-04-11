@@ -1,4 +1,4 @@
-module github.com/jee-lee/budget-core
+module github.com/BudjeeApp/budget-core
 
 go 1.20
 

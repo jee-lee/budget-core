@@ -3,10 +3,10 @@ package test
 import (
 	"database/sql"
 	"fmt"
+	category "github.com/BudjeeApp/budget-core/internal/category/repository"
+	user "github.com/BudjeeApp/budget-core/internal/user/repository"
 	"github.com/go-faker/faker/v4"
 	"github.com/google/uuid"
-	category "github.com/jee-lee/budget-core/internal/category/repository"
-	user "github.com/jee-lee/budget-core/internal/user/repository"
 	"github.com/jmoiron/sqlx"
 	"os"
 	"sync"

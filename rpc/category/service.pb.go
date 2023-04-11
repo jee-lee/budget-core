@@ -127,15 +127,23 @@ type CreateCategoryRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Required fields
-	Name   string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Required field: The user-supplied name of the category, it should allow any characters in the name.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Required field: The ID of the user requesting to create the category for their budget.
 	UserId string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	// Optional fields
-	ParentCategoryId string    `protobuf:"bytes,3,opt,name=parent_category_id,json=parentCategoryId,proto3" json:"parent_category_id,omitempty"`
-	Allowance        int64     `protobuf:"varint,4,opt,name=allowance,proto3" json:"allowance,omitempty"`
-	CycleType        CycleType `protobuf:"varint,5,opt,name=cycle_type,json=cycleType,proto3,enum=budjee.budget.CycleType" json:"cycle_type,omitempty"`
-	Rollover         bool      `protobuf:"varint,6,opt,name=rollover,proto3" json:"rollover,omitempty"`
-	LinkedUsersId    string    `protobuf:"bytes,7,opt,name=linked_users_id,json=linkedUsersId,proto3" json:"linked_users_id,omitempty"`
+	// Optional field: The category ID that indicates the parent category ID. All transactions under this category will also
+	// count towards its parent.
+	ParentCategoryId string `protobuf:"bytes,3,opt,name=parent_category_id,json=parentCategoryId,proto3" json:"parent_category_id,omitempty"`
+	// Optional field: The maximum amount of money that can be spent through transactions towards this category.
+	Allowance int64 `protobuf:"varint,4,opt,name=allowance,proto3" json:"allowance,omitempty"`
+	// Optional field: The duration of the budget cycle. This will reset the allowance under the given timespan.
+	CycleType CycleType `protobuf:"varint,5,opt,name=cycle_type,json=cycleType,proto3,enum=budjee.budget.CycleType" json:"cycle_type,omitempty"`
+	// Optional field: Indicates if the difference of the actual transaction amount under the given cycle should rollover
+	// to the next cycle. Applies this logic to both a category under spend and over spend.
+	Rollover bool `protobuf:"varint,6,opt,name=rollover,proto3" json:"rollover,omitempty"`
+	// Optional field: The linked users id. NOT the id of the user who is linked. If present it will share the category details
+	// and transactions under this category to the linked user. This must be present if
+	LinkedUsersId string `protobuf:"bytes,7,opt,name=linked_users_id,json=linkedUsersId,proto3" json:"linked_users_id,omitempty"`
 }
 
 func (x *CreateCategoryRequest) Reset() {
