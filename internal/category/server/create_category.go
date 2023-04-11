@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"github.com/jee-lee/budget-core/internal/category/repository"
 	"github.com/jee-lee/budget-core/internal/helpers"
 	pb "github.com/jee-lee/budget-core/rpc/category"
@@ -17,18 +16,18 @@ func (s *Server) CreateCategory(ctx context.Context, req *pb.CreateCategoryReque
 	if err != nil {
 		return nil, err
 	}
-	jointUserId, err := helpers.NullStringFromUUID("joint_user_id", req.GetJointUserId())
+	linkedUsersId, err := helpers.NullStringFromUUID("linked_users_id", req.GetLinkedUsersId())
 	if err != nil {
 		return nil, err
 	}
 	repoCategoryCreateRequest := repository.CategoryCreateRequest{
-		UserID:           uuid.NewString(),
+		UserID:           req.GetUserId(),
 		Name:             req.GetName(),
 		ParentCategoryID: parentCategoryId,
 		Allowance:        req.GetAllowance(),
 		CycleType:        req.GetCycleType().String(),
 		Rollover:         req.GetRollover(),
-		JointUserID:      jointUserId,
+		LinkedUsersID:    linkedUsersId,
 	}
 	createdCategory, err := s.Repo.CreateCategory(ctx, repoCategoryCreateRequest)
 	if err != nil {

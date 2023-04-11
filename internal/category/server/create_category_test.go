@@ -132,10 +132,10 @@ func TestServer_CreateCategory(t *testing.T) {
 			},
 		},
 		{
-			TestName: "invalid jointUserId",
+			TestName: "invalid linkedUsersId",
 			CreateCategoryRequest: &pb.CreateCategoryRequest{
-				Name:        "Category",
-				JointUserId: "13a6682f-795c-49c1-bfbb-f94f40eef",
+				Name:          "Category",
+				LinkedUsersId: "13a6682f-795c-49c1-bfbb-f94f40eef",
 			},
 		},
 	}
