@@ -14,10 +14,10 @@ var (
 func setupTest(t *testing.T) {
 	t.Helper()
 	testRepo, err := test.GetDBInstance()
-	repo = testRepo.User
 	if err != nil {
 		t.Fatal(err.Error())
 	}
+	repo = testRepo.User
 	test.RemoveUsers(t)
 }
 
